@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <style>
+        div{
+            text-align: center;
+        }
+    </style>
+
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <title>React App</title>
+
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        var runs=0;
+        var wickets=0;
+        var arr=[];
+        var addrun=0;
+        var inputRef=React.createRef();
+
+        function addRuns(num){
+            // if(wickets<10){
+            //     runs+=num;
+            //     arr.push(num);
+            //     console.log(arr);
+            //     rootElement.render(<App />);
+            // }
+            addrun=num;
+            rootElement.render(<App />);
+        }
+
+        function addWickets(wick){
+            // if(wickets<10){
+            //     wickets+=wick;
+            //     arr.push('W');
+            //     console.log(arr);
+            //     rootElement.render(<App />);
+            // }
+            addrun='W';
+            rootElement.render(<App />);
+        }
+
+        function eventHandler(event){
+          event.preventDefault();
+
+          if(addrun=="W"){
+            if(wickets<10)
+            wickets+=1;
+            else
+            wickets=0;
+            runs=0;
+          }
+          else{
+            runs+=addrun;
+          }
+          arr.unshift(`${addrun}: ${inputRef.current.value}`);//using template literals
+          addrun=0;//after submit ,make the value to default
+          inputRef.current.value="";//after submit ,make the value to default
+
+          console.log(inputRef.current.value);
+          console.log(arr);
+
+          rootElement.render(<App />);
+        }
+        
+        const Button_component= () =>(
+          <div>
+            <button onClick={ () => addRuns(0)}>0</button>
+             <button onClick={ () => addRuns(1)}>1</button>
+             <button onClick={ () => addRuns(2)}>2</button>
+             <button onClick={ () => addRuns(3)}>3</button>
+             <button onClick={ () => addRuns(4)}>4</button>
+             <button onClick={ () => addRuns(5)}>5</button>
+             <button onClick={ () => addRuns(6)}>6</button>
+             <button onClick={ () => addWickets(1)}>Wicket</button>
+          </div>
+        )
+        
+        const Display_Score=() =>(
+            <div>
+                {arr.map((i,index) => (
+                    <>
+                    {index%6==0?<br/>:null}
+                      <span key={index}>
+                          {i=='W'?<strong>W</strong>:null}
+                          {i==0?<strong>.</strong>:i}
+                      </span> &nbsp;&nbsp;&nbsp;
+                    </>
+                ))}
+            </div>
+        )
+        
+        const Form = () =>(
+          <form onSubmit={eventHandler}>
+            <input value={addrun}/>
+            <input ref={inputRef} placeholder="Write a comment here!!"/>
+            <button>Submit</button>
+          </form>
+        )
+
+      const App = () => {
+        return (
+          <>
+             <h1>SCORE KEEPER</h1>
+             <h2>SCORE: {runs}/{wickets}</h2>
+             <Button_component/>
+             <br/>
+             <Form/>
+             <hr/>
+
+             {arr.map((i,index) =>(<p key={index}>{i}</p>))}
+
+          </>
+        );
+      };
+
+      const rootElement = ReactDOM.createRoot(document.getElementById("root"));
+      rootElement.render(<App />);
+    </script>
+
+  </body>
+</html>
